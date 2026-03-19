@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: klekovina
+    runtime: docker
+    region: frankfurt
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
