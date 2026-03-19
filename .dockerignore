@@ -9,3 +9,4 @@ README.md
 .svelte-kit
 dist
 .DS_Store
+*.log
