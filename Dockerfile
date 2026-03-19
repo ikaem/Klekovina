@@ -3,17 +3,23 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files first
 COPY package*.json ./
+COPY svelte.config.js ./
+COPY tsconfig.json ./
+COPY vite.config.ts ./
+COPY .prettierrc ./
+COPY .prettierignore ./
 
 # Install dependencies
 RUN npm ci
 
-# Copy source code
-COPY . .
+# Copy source code and config files
+COPY src ./src
+COPY static ./static
 
 # Build the SvelteKit app
-RUN npm run build
+RUN npm run build && ls -la build/
 
 # Production stage
 FROM node:20-alpine

@@ -7,6 +7,5 @@ README.md
 .env.local
 .vscode
 .svelte-kit
-build
 dist
 .DS_Store
