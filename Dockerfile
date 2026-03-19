@@ -29,11 +29,17 @@ RUN npm ci --omit=dev
 # Copy built app from builder
 COPY --from=builder /app/build ./build
 
-# Expose port (Render will use PORT environment variable)
-EXPOSE 3000
+# Copy start script
+COPY start.sh ./start.sh
+RUN chmod +x ./start.sh
 
 # Set Node environment to production
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
+# Expose port
+EXPOSE 3000
 
 # Start the app
-CMD ["node", "build"]
+CMD [\"./start.sh\"]
