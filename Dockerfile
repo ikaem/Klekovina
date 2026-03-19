@@ -3,20 +3,20 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy all files
-COPY . .
+# Copy package files first (for better layer caching)
+COPY package*.json ./
 
 # Install dependencies
 RUN npm ci
 
-# Verify Node adapter is installed
-RUN npm list @sveltejs/adapter-node
+# Copy source and config files
+COPY . .
 
 # Build the SvelteKit app
 RUN npm run build
 
-# Verify build output exists
-RUN ls -la build/ || (echo "Build failed!" && exit 1)
+# Verify build directory exists
+RUN test -d build && echo "Build successful!" || (echo "Build failed - no build directory" && exit 1)
 
 # Production stage
 FROM node:20-alpine
@@ -26,17 +26,19 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install production dependencies only
-RUN npm ci --omit=dev
+# Install only production dependencies
+RUN npm ci --only=production
 
 # Copy built app from builder
 COPY --from=builder /app/build ./build
 
 # Copy start script
-COPY start.sh ./start.sh
+COPY start.sh ./
+
+# Make start script executable
 RUN chmod +x ./start.sh
 
-# Set Node environment to production
+# Set environment
 ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=3000
@@ -44,5 +46,9 @@ ENV PORT=3000
 # Expose port
 EXPOSE 3000
 
-# Start the app
-CMD [\"./start.sh\"]
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+
+# Start application
+CMD ["./start.sh"]
