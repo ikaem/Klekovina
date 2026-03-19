@@ -9,8 +9,14 @@ COPY . .
 # Install dependencies
 RUN npm ci
 
+# Verify Node adapter is installed
+RUN npm list @sveltejs/adapter-node
+
 # Build the SvelteKit app
 RUN npm run build
+
+# Verify build output exists
+RUN ls -la build/ || (echo "Build failed!" && exit 1)
 
 # Production stage
 FROM node:20-alpine

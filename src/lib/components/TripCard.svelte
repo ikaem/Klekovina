@@ -12,28 +12,40 @@
 	const spotsRemaining = $derived(trip.maxParticipants - trip.participants);
 </script>
 
-<div class="rounded-lg border border-gray-200 bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+<div
+	class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-shadow hover:shadow-lg"
+>
 	{#if trip.imageUrl}
-		<div class="h-48 w-full bg-gray-300 overflow-hidden">
-			<img src={trip.imageUrl} alt={trip.name} class="w-full h-full object-cover" />
+		<div class="h-48 w-full overflow-hidden bg-gray-300">
+			<img src={trip.imageUrl} alt={trip.name} class="h-full w-full object-cover" />
 		</div>
 	{:else}
-		<div class="h-48 w-full bg-gradient-to-br from-blue-400 to-green-400 flex items-center justify-center">
-			<span class="text-white text-2xl">🌿</span>
+		<div
+			class="flex h-48 w-full items-center justify-center bg-gradient-to-br from-blue-400 to-green-400"
+		>
+			<span class="text-2xl text-white">🌿</span>
 		</div>
 	{/if}
 
 	<div class="p-6">
-		<div class="flex items-start justify-between mb-2">
+		<div class="mb-2 flex items-start justify-between">
 			<h3 class="text-xl font-bold text-gray-900">{trip.name}</h3>
-			<span class="inline-block px-3 py-1 rounded-full text-sm font-medium {difficultyStyles[trip.difficulty]}">
-				{trip.difficulty === 'easy' ? 'Lako' : trip.difficulty === 'moderate' ? 'Umjereno' : 'Teško'}
+			<span
+				class="inline-block rounded-full px-3 py-1 text-sm font-medium {difficultyStyles[
+					trip.difficulty
+				]}"
+			>
+				{trip.difficulty === 'easy'
+					? 'Lako'
+					: trip.difficulty === 'moderate'
+						? 'Umjereno'
+						: 'Teško'}
 			</span>
 		</div>
 
-		<p class="text-gray-600 text-sm mb-4">{trip.description}</p>
+		<p class="mb-4 text-sm text-gray-600">{trip.description}</p>
 
-		<div class="grid grid-cols-2 gap-4 mb-4 text-sm">
+		<div class="mb-4 grid grid-cols-2 gap-4 text-sm">
 			<div class="flex items-center text-gray-700">
 				<span class="mr-2">📍</span>
 				<span>{trip.location}</span>
@@ -52,23 +64,27 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+		<div class="grid grid-cols-2 gap-4 border-t border-gray-200 pt-4">
 			<div class="text-center">
 				<div class="text-2xl font-bold text-gray-900">{trip.elevation}</div>
 				<div class="text-xs text-gray-600">Uspinjanje (m)</div>
 			</div>
 			<div class="text-center">
-				<div class="text-2xl font-bold text-gray-900">{trip.participants}/{trip.maxParticipants}</div>
+				<div class="text-2xl font-bold text-gray-900">
+					{trip.participants}/{trip.maxParticipants}
+				</div>
 				<div class="text-xs text-gray-600">Sudionici</div>
 			</div>
 		</div>
 
 		{#if spotsRemaining > 0}
-			<div class="mt-4 p-3 bg-blue-50 rounded">
-				<p class="text-sm font-medium text-blue-900">{spotsRemaining} mjesto{spotsRemaining !== 1 ? 'a' : ''} dostupno</p>
+			<div class="mt-4 rounded bg-blue-50 p-3">
+				<p class="text-sm font-medium text-blue-900">
+					{spotsRemaining} mjesto{spotsRemaining !== 1 ? 'a' : ''} dostupno
+				</p>
 			</div>
 		{:else}
-			<div class="mt-4 p-3 bg-gray-100 rounded">
+			<div class="mt-4 rounded bg-gray-100 p-3">
 				<p class="text-sm font-medium text-gray-900">Ruta je popunjena</p>
 			</div>
 		{/if}
